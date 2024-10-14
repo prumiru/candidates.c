@@ -1,116 +1,142 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
 
-// 후보자 정보 구조체 정의
-struct Candidate {
-    char name[50];
-    char dob[15];      // 생년월일
-    char gender[2];    // 성별
-    char email[50];    // 이메일
-    char nationality[30]; // 국적
-    float bmi;         // BMI
-    char main_skill[30]; // 주 스킬
-    char sub_skill[30];  // 보조 스킬
-    int topik_level;   // 한국어 등급
-    char mbti[5];      // MBTI
-    char introduction[200]; // 소개
-};
+void hello(int a);
 
-// 후보자 정보 배열
-struct Candidate candidates[6];
+void Scan_info(char* candidate, char* age, int a);
 
-// 함수 선언
-void input_candidate_data();
-void display_candidate_data();
-int calculate_age(const char* dob);
+void Out_info(char* candidate, char* age, int a);
+
 
 int main() {
-    char group_name[50]; // 그룹명 저장
-    printf("오디션 그룹명을 입력하세요: ");
-    fgets(group_name, sizeof(group_name), stdin);
-    group_name[strcspn(group_name, "\n")] = '\0';  // 개행문자 제거
+    int a = 0;
 
-    input_candidate_data();
+    char age[6][5] = { 0 };
+    char member_info[6][256];
 
-    printf("\n####################################\n");
-    printf("     오디션 후보자 데이터 조회 (%s)\n", group_name);
+    char* candidate01 = member_info[0];                  //여기 다시 해결하기
+    char* candidate02 = member_info[1];
+    char* candidate03 = member_info[2];
+    char* candidate04 = member_info[3];
+    char* candidate05 = member_info[4];
+    char* candidate06 = member_info[5];
+
+    printf("####################################\n");
+    printf("\t오디션 후보자 데이터 입력\n");
     printf("####################################\n");
 
-    display_candidate_data();
+
+
+
+    for (a = 0; a < 6; a++) {
+        hello(a);
+        Scan_info(member_info[a], age[a], a);        // 입력 값 6개를 받기
+    }
+
+
+    for (a = 0; a < 6; a++) {
+        Out_info(member_info[a], age[a], a);        //  값 6개를 출력
+    }
 
     return 0;
 }
 
-// 후보자 데이터를 입력하는 함수
-void input_candidate_data() {
-    for (int i = 0; i < 6; i++) {
-        printf("\n%d번째 후보자의 정보를 입력하세요.\n", i + 1);
+void hello(int a) {
+    char number[6][10] = {
+    "첫",
+    "두",
+    "세",
+    "네",
+    "다섯",
+    "여섯"
+    };
 
-        printf("성명: ");
-        fgets(candidates[i].name, sizeof(candidates[i].name), stdin);
-        candidates[i].name[strcspn(candidates[i].name, "\n")] = '\0';  // 개행문자 제거
+    printf("%s", number[a]);                            //N번째 후보자 출력
 
-        printf("생년월일(YYYY/MM/DD 형식): ");
-        fgets(candidates[i].dob, sizeof(candidates[i].dob), stdin);
-        candidates[i].dob[strcspn(candidates[i].dob, "\n")] = '\0';
 
-        printf("성별(여성이면 F, 남성이면 M): ");
-        fgets(candidates[i].gender, sizeof(candidates[i].gender), stdin);
-        candidates[i].gender[strcspn(candidates[i].gender, "\n")] = '\0';
+    printf("번째 후보자의 정보를 입력합니다.\n");
+    printf("-----------------------------------\n");
 
-        printf("메일 주소: ");
-        fgets(candidates[i].email, sizeof(candidates[i].email), stdin);
-        candidates[i].email[strcspn(candidates[i].email, "\n")] = '\0';
-
-        printf("국적: ");
-        fgets(candidates[i].nationality, sizeof(candidates[i].nationality), stdin);
-        candidates[i].nationality[strcspn(candidates[i].nationality, "\n")] = '\0';
-
-        printf("BMI: ");
-        scanf_s("%f", &candidates[i].bmi);
-
-        printf("주 스킬: ");
-        fgets(candidates[i].main_skill, sizeof(candidates[i].main_skill), stdin);
-        candidates[i].main_skill[strcspn(candidates[i].main_skill, "\n")] = '\0';
-
-        printf("보조 스킬: ");
-        fgets(candidates[i].sub_skill, sizeof(candidates[i].sub_skill), stdin);
-        candidates[i].sub_skill[strcspn(candidates[i].sub_skill, "\n")] = '\0';
-
-        printf("한국어 등급(TOPIK, 숫자): ");
-        scanf_s("%d", &candidates[i].topik_level);
-
-        printf("MBTI: ");
-        fgets(candidates[i].mbti, sizeof(candidates[i].mbti), stdin);
-        candidates[i].mbti[strcspn(candidates[i].mbti, "\n")] = '\0';
-
-        printf("한 줄 자기소개: ");
-        fgets(candidates[i].introduction, sizeof(candidates[i].introduction), stdin);
-        candidates[i].introduction[strcspn(candidates[i].introduction, "\n")] = '\0';
-    }
 }
 
-// 후보자 데이터를 출력하는 함수
-void display_candidate_data() {
-    printf("=============================================================================================\n");
-    printf("성   명|  생년월일  | 성별 | 메일 주소 | 국적 | BMI  | 주 스킬 | 보조 스킬 | TOPIK | MBTI  |\n");
-    printf("=============================================================================================\n");
+void Scan_info(char* candidate, char* age, int a) {                  //후보자 데이터 입력 
 
-    for (int i = 0; i < 6; i++) {
-        printf("%-8s | %s | %s | %-20s | %-6s | %.1f | %-7s | %-8s | %d | %s |\n",
-            candidates[i].name, candidates[i].dob, candidates[i].gender,
-            candidates[i].email, candidates[i].nationality, candidates[i].bmi,
-            candidates[i].main_skill, candidates[i].sub_skill,
-            candidates[i].topik_level, candidates[i].mbti);
-        printf("---------------------------------------------------------------------------------------------\n");
-        printf("%s\n", candidates[i].introduction);
-        printf("---------------------------------------------------------------------------------------------\n");
+    int p = 0;
+    int i = 0;
+    int count = 0;
+    char ch;
+    const char* base_info[11] = {
+        "성명: ",
+        "생일(YYYY/MM/DD 형식): ",
+        "성별(여성이면 F 또는 남성이면 M): ",
+        "메일 주소: ",
+        "국적: ",
+        "BMI: ",                                    //2차원 배열 사용
+        "주 스킬: ",
+        "보조 스킬: ",
+        "한국어 등급(TOPIK): ",
+        "MBTI: ",
+        "소개: "
+    };
+
+    while (count < 11) {
+
+        printf("%s", base_info[count]);                      //각 질문 하나씩 출력
+
+        while ((ch = getchar()) != '\n' && ch != EOF) {      // 줄바꿈 또는 EOF를 만날 때까지 입력       
+            candidate[i++] = ch;
+            if (count == 1 && p < 4) {
+                age[p++] = ch;
+            }                                           // 입력받은 문자 를 저장 
+        }
+        candidate[i++] = '^';                       // 각 질문 끝에 '^' 추가하여 질문 별로 구별
+        count++;
     }
+    candidate[i - 1] = '\0';                                //각 문장 끝에 \0 추가
+    age[p] = '\0';
+    printf("=================================\n");
 }
 
-// 생년월일로 나이를 계산하는 함수 (추가 구현 가능)
-int calculate_age(const char* dob) {
-    // 생년월일에서 나이를 계산하는 로직을 추가할 수 있습니다.
-    return 0;
+
+void Out_info(char* candidate, char* age, int a) {
+    int sansu = 0;
+    int nayi[6];
+    int slash = 0;
+    int i = 0;
+    int n = 0;
+    int count = 0;
+
+    sansu = atoi(age);
+    nayi[a] = 2024 - sansu;       // 만 나이 계산
+
+    printf("####################################\n");
+    printf("\t오디션 후보자 데이터 조회 \n");
+    printf("####################################\n");
+    printf("=============================================================================================\n");
+    printf(" 성   명  | 생     일|성별|  메 일    |국  적|BMI|주스킬|보조 스킬|TOPIK|MBTI|소개\n");
+
+
+    while (count < 11 && candidate[i] != '\0') {
+
+        if (candidate[i] == '^' && count == 0)
+            printf("(%d)", nayi[a]);                    // 이름 뒤에 (만나이) 출력
+
+        if (candidate[i] == '^') {
+            printf(" |");                         // 후보자 정보들을 출력후 | << 구별
+            count++;
+        }
+        else if (candidate[i] == 'F' && count == 2) {       // 성별 출력
+            printf("여");
+        }
+        else if (candidate[i] == 'M' && count == 2)        //성별 출력2
+            printf("남");
+        else
+            printf("%c", candidate[i]);
+
+        i++;
+    }
+
+
+    printf("\n");
+
 }
