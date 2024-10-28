@@ -1,142 +1,118 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-void hello(int a);
+int main()
+{
+    char *candidates[12] = {
+        "박지연", "000001", "Ethan Smith", "000002", "Helena Silva", "000003", "Liam Wilson", "000004", "Sakura Tanaka", "000005", "Carlos Mendez", "000006"};
 
-void Scan_info(char* candidate, char* age, int a);
-
-void Out_info(char* candidate, char* age, int a);
-
-
-int main() {
-    int a = 0;
-
-    char age[6][5] = { 0 };
-    char member_info[6][256];
-
-    char* candidate01 = member_info[0];                  //여기 다시 해결하기
-    char* candidate02 = member_info[1];
-    char* candidate03 = member_info[2];
-    char* candidate04 = member_info[3];
-    char* candidate05 = member_info[4];
-    char* candidate06 = member_info[5];
-
+    char judge_name[50], expertise[50];
     printf("####################################\n");
-    printf("\t오디션 후보자 데이터 입력\n");
+    printf("#       오디션 심사 결과 입력      #\n");
     printf("####################################\n");
+    printf("> 심사자 이름: ");
+    scanf("%s", judge_name);
+    printf("> 전문 분야: ");
+    scanf("%s", expertise);
 
+    // 후보자 점수 배열 (ID, 음악, 댄스, 보컬, 비주얼, 전달력, 총점)
+    int scoring_sheet[42];
 
+    // 후보자 점수 입력
+    for (int i = 0; i < 6; i++)
+    {
+        printf("++++++++++++++++++++++++++++++++++++\n");
+        printf("후보자: %s\n", candidates[i * 2]);
 
+        scoring_sheet[i * 7] = atoi(candidates[i * 2 + 1]); // 후보자 ID candidates에서 꺼내옴
 
-    for (a = 0; a < 6; a++) {
-        hello(a);
-        Scan_info(member_info[a], age[a], a);        // 입력 값 6개를 받기
+        int total_score = 0;
+        for (int j = 1; j <= 5; j++)
+        {
+            int score = -1;
+            const char *fields[] = {"음악 소양", "댄스", "보컬", "비주얼", "전달력"};
+            while (score < 0 || score > 100)
+            {
+                printf("%s: ", fields[j - 1]);
+                scanf("%d", &score);
+                if (score < 0 || score > 100)
+                {
+                    printf("0에서 100 사이의 점수만 입력 가능.\n");
+                }
+            }
+            scoring_sheet[i * 7 + j] = score;
+            total_score += score;
+        }
+        scoring_sheet[i * 7 + 6] = total_score;
     }
 
-
-    for (a = 0; a < 6; a++) {
-        Out_info(member_info[a], age[a], a);        //  값 6개를 출력
+    // 총점 출력
+    printf("++++++++++++++++++++++++++++++++++++\n");
+    printf("입력을 모두 완료했습니다.\n");
+    printf("입력하신 내용을 검토하세요!\n");
+    printf("------------------------------------\n");
+    for (int i = 0; i < 6; i++)
+    {
+        printf("%s: %d\n", candidates[i * 2], scoring_sheet[i * 7 + 6]);
     }
+
+    // 제출 확인
+    char submit;
+    printf("제출하시겠습니까? ");
+    getchar();
+    scanf("%c", &submit);
+
+    if (submit == 'Y' || submit == 'y')
+    {
+        printf("***최종 제출을 완료했습니다.***\n");
+        printf(">\n");
+
+        // 버블 정렬
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = i + 1; j < 6; j++)
+            {
+                if (scoring_sheet[i * 7 + 6] < scoring_sheet[j * 7 + 6])
+                {
+                    // 점수 데이터 교환
+                    for (int k = 0; k < 7; k++)
+                    {
+                        int temp = scoring_sheet[i * 7 + k];
+                        scoring_sheet[i * 7 + k] = scoring_sheet[j * 7 + k];
+                        scoring_sheet[j * 7 + k] = temp;
+                    }
+                    // 이름 교환
+                    char *temp_name = candidates[i * 2];
+                    candidates[i * 2] = candidates[j * 2];
+                    candidates[j * 2] = temp_name;
+
+                    char *temp_id = candidates[i * 2 + 1];
+                    candidates[i * 2 + 1] = candidates[j * 2 + 1];
+                    candidates[j * 2 + 1] = temp_id;
+                }
+            }
+        }
+
+        // 합격 멤 출력
+        printf("=======================================\n");
+        printf("후보 선발 결과 집계 중 ...\n");
+        printf("=======================================\n");
+        printf("#########################################\n");
+        printf("# 밀리웨이즈의 멤버가 된 걸 축하합니다! #\n");
+        printf("#########################################\n");
+        for (int i = 0; i < 4; i++)
+        {
+            printf("%d. %s\n", i + 1, candidates[i * 2]);
+        }
+        printf("\n>\n");
+    }
+    else
+    {
+        printf("다시 처음부터 입력.\n");
+    }
+
+    getchar();
+    getchar();
 
     return 0;
-}
-
-void hello(int a) {
-    char number[6][10] = {
-    "첫",
-    "두",
-    "세",
-    "네",
-    "다섯",
-    "여섯"
-    };
-
-    printf("%s", number[a]);                            //N번째 후보자 출력
-
-
-    printf("번째 후보자의 정보를 입력합니다.\n");
-    printf("-----------------------------------\n");
-
-}
-
-void Scan_info(char* candidate, char* age, int a) {                  //후보자 데이터 입력 
-
-    int p = 0;
-    int i = 0;
-    int count = 0;
-    char ch;
-    const char* base_info[11] = {
-        "성명: ",
-        "생일(YYYY/MM/DD 형식): ",
-        "성별(여성이면 F 또는 남성이면 M): ",
-        "메일 주소: ",
-        "국적: ",
-        "BMI: ",                                    //2차원 배열 사용
-        "주 스킬: ",
-        "보조 스킬: ",
-        "한국어 등급(TOPIK): ",
-        "MBTI: ",
-        "소개: "
-    };
-
-    while (count < 11) {
-
-        printf("%s", base_info[count]);                      //각 질문 하나씩 출력
-
-        while ((ch = getchar()) != '\n' && ch != EOF) {      // 줄바꿈 또는 EOF를 만날 때까지 입력       
-            candidate[i++] = ch;
-            if (count == 1 && p < 4) {
-                age[p++] = ch;
-            }                                           // 입력받은 문자 를 저장 
-        }
-        candidate[i++] = '^';                       // 각 질문 끝에 '^' 추가하여 질문 별로 구별
-        count++;
-    }
-    candidate[i - 1] = '\0';                                //각 문장 끝에 \0 추가
-    age[p] = '\0';
-    printf("=================================\n");
-}
-
-
-void Out_info(char* candidate, char* age, int a) {
-    int sansu = 0;
-    int nayi[6];
-    int slash = 0;
-    int i = 0;
-    int n = 0;
-    int count = 0;
-
-    sansu = atoi(age);
-    nayi[a] = 2024 - sansu;       // 만 나이 계산
-
-    printf("####################################\n");
-    printf("\t오디션 후보자 데이터 조회 \n");
-    printf("####################################\n");
-    printf("=============================================================================================\n");
-    printf(" 성   명  | 생     일|성별|  메 일    |국  적|BMI|주스킬|보조 스킬|TOPIK|MBTI|소개\n");
-
-
-    while (count < 11 && candidate[i] != '\0') {
-
-        if (candidate[i] == '^' && count == 0)
-            printf("(%d)", nayi[a]);                    // 이름 뒤에 (만나이) 출력
-
-        if (candidate[i] == '^') {
-            printf(" |");                         // 후보자 정보들을 출력후 | << 구별
-            count++;
-        }
-        else if (candidate[i] == 'F' && count == 2) {       // 성별 출력
-            printf("여");
-        }
-        else if (candidate[i] == 'M' && count == 2)        //성별 출력2
-            printf("남");
-        else
-            printf("%c", candidate[i]);
-
-        i++;
-    }
-
-
-    printf("\n");
-
 }
